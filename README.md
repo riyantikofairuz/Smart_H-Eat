@@ -104,7 +104,7 @@ To get a local copy up and running, follow these simple steps.
 
 - **Muhammad Akbar Fairuz Riyantiko** - 4342501090
 - **Zakki Zakwan Adysti** - 4342501063
-- **Kemas Muhammad Alif Bisyafa Basunjaya** - 4342501068
+- **Kemas Muhammad Alif Bisyafa Basunjaya jump boad** - 4342501068
 - **Faiz Annabil** - 4342501071
 - **Faizal Kahfi Lubis** - 4342501077
 - **Martunis Tks** - 4342501080
