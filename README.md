@@ -2,7 +2,7 @@
 
 This repository contains the source code for the H-EAT project, a smart vending machine system. This project was developed as part of the PBL TRPL-313 program. The system is composed of a backend API built with Laravel and a cross-platform mobile application built with Flutter.
 
-### Architecture
+## Architecture
 
 The project is divided into two main components:
 
