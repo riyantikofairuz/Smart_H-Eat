@@ -35,6 +35,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   http: ^1.6.0
+  intl: ^0.20.3
 
 dev_dependencies:
   flutter_test:
@@ -59,9 +60,9 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/smart_heat_logo.png
-    - assets/images/smart_heat_logo.jpg
+    - assets/images/
     - assets/images/menu/
+    - assets/menu/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

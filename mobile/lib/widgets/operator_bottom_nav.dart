@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
-import '../core/theme/app_colors.dart';
+import '../constants/app_colors.dart';
 
+/// Reusable Bottom Navigation Bar for the Operator Interface of Smart H-EAT.
+/// Displays 3 tabs: Dashboard (0), Stok (1), and Laporan (2).
+/// The currently selected item is highlighted with a rounded terracotta capsule button.
 class OperatorBottomNav extends StatelessWidget {
   final int currentIndex;
-  final ValueChanged<int> onTabSelected;
+  final ValueChanged<int>? onTabSelected;
+  final ValueChanged<int>? onTap;
 
   const OperatorBottomNav({
     super.key,
     required this.currentIndex,
-    required this.onTabSelected,
+    this.onTabSelected,
+    this.onTap,
   });
+
+  void _handleTap(int index) {
+    if (onTap != null) {
+      onTap!(index);
+    } else if (onTabSelected != null) {
+      onTabSelected!(index);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +32,13 @@ class OperatorBottomNav extends StatelessWidget {
         border: Border(
           top: BorderSide(color: Color(0xFFF1F5F9), width: 1.0),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Color.fromRGBO(0, 0, 0, 0.05),
+            blurRadius: 10,
+            offset: Offset(0, -2),
+          ),
+        ],
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: SafeArea(
@@ -75,16 +95,16 @@ class OperatorBottomNav extends StatelessWidget {
 
     if (isSelected) {
       return GestureDetector(
-        onTap: () => onTabSelected(index),
+        onTap: () => _handleTap(index),
         child: Container(
           width: 76,
           height: 62,
           decoration: BoxDecoration(
-            color: AppColors.operatorNavActive,
+            color: AppColors.primary,
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: AppColors.operatorNavActive.withValues(alpha: 0.28),
+                color: AppColors.primary.withValues(alpha: 0.28),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -99,7 +119,7 @@ class OperatorBottomNav extends StatelessWidget {
                 label,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 10.5,
+                  fontSize: 11,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -111,20 +131,20 @@ class OperatorBottomNav extends StatelessWidget {
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () => onTabSelected(index),
+      onTap: () => _handleTap(index),
       child: SizedBox(
         width: 76,
         height: 62,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            builder(const Color(0xFF1E293B)),
+            builder(AppColors.textPrimary),
             const SizedBox(height: 3),
             Text(
               label,
               style: const TextStyle(
-                color: Color(0xFF1E293B),
-                fontSize: 10.5,
+                color: AppColors.textPrimary,
+                fontSize: 11,
                 fontWeight: FontWeight.w600,
               ),
             ),
