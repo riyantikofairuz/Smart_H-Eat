@@ -59,14 +59,14 @@ class DummyDataService extends ChangeNotifier {
 
   void _initDefaultData() {
     _categories.addAll([
-      const CategoryModel(id: 1, name: 'Nasi'),
-      const CategoryModel(id: 2, name: 'Sup & Kuah'),
-      const CategoryModel(id: 3, name: 'Mie & Pasta'),
+      CategoryModel(id: 1, name: 'Nasi'),
+      CategoryModel(id: 2, name: 'Sup & Kuah'),
+      CategoryModel(id: 3, name: 'Mie & Pasta'),
     ]);
 
     _menus.addAll([
       // Kategori 1: Nasi (6 items)
-      const MenuModel(
+      MenuModel(
         id: 1,
         categoryId: 1,
         categoryName: 'Nasi',
@@ -79,7 +79,7 @@ class DummyDataService extends ChangeNotifier {
         minStockThreshold: 2,
         isActive: true,
       ),
-      const MenuModel(
+      MenuModel(
         id: 2,
         categoryId: 1,
         categoryName: 'Nasi',
@@ -92,7 +92,7 @@ class DummyDataService extends ChangeNotifier {
         minStockThreshold: 2,
         isActive: true,
       ),
-      const MenuModel(
+      MenuModel(
         id: 3,
         categoryId: 1,
         categoryName: 'Nasi',
@@ -105,7 +105,7 @@ class DummyDataService extends ChangeNotifier {
         minStockThreshold: 2,
         isActive: true,
       ),
-      const MenuModel(
+      MenuModel(
         id: 4,
         categoryId: 1,
         categoryName: 'Nasi',
@@ -118,7 +118,7 @@ class DummyDataService extends ChangeNotifier {
         minStockThreshold: 2,
         isActive: true,
       ),
-      const MenuModel(
+      MenuModel(
         id: 5,
         categoryId: 1,
         categoryName: 'Nasi',
@@ -131,7 +131,7 @@ class DummyDataService extends ChangeNotifier {
         minStockThreshold: 2,
         isActive: true,
       ),
-      const MenuModel(
+      MenuModel(
         id: 6,
         categoryId: 1,
         categoryName: 'Nasi',
@@ -146,7 +146,7 @@ class DummyDataService extends ChangeNotifier {
       ),
 
       // Kategori 2: Sup & Kuah (2 items)
-      const MenuModel(
+      MenuModel(
         id: 7,
         categoryId: 2,
         categoryName: 'Sup & Kuah',
@@ -159,7 +159,7 @@ class DummyDataService extends ChangeNotifier {
         minStockThreshold: 2,
         isActive: true,
       ),
-      const MenuModel(
+      MenuModel(
         id: 8,
         categoryId: 2,
         categoryName: 'Sup & Kuah',
@@ -174,7 +174,7 @@ class DummyDataService extends ChangeNotifier {
       ),
 
       // Kategori 3: Mie & Pasta (4 items)
-      const MenuModel(
+      MenuModel(
         id: 9,
         categoryId: 3,
         categoryName: 'Mie & Pasta',
@@ -187,7 +187,7 @@ class DummyDataService extends ChangeNotifier {
         minStockThreshold: 2,
         isActive: true,
       ),
-      const MenuModel(
+      MenuModel(
         id: 10,
         categoryId: 3,
         categoryName: 'Mie & Pasta',
@@ -200,7 +200,7 @@ class DummyDataService extends ChangeNotifier {
         minStockThreshold: 2,
         isActive: true,
       ),
-      const MenuModel(
+      MenuModel(
         id: 11,
         categoryId: 3,
         categoryName: 'Mie & Pasta',
@@ -213,7 +213,7 @@ class DummyDataService extends ChangeNotifier {
         minStockThreshold: 2,
         isActive: true,
       ),
-      const MenuModel(
+      MenuModel(
         id: 12,
         categoryId: 3,
         categoryName: 'Mie & Pasta',

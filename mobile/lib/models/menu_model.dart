@@ -2,19 +2,20 @@ import 'variation_model.dart';
 
 class MenuModel {
   final int menuId;
-  int categoryId;
-  String categoryName;
-  String name;
-  String description;
-  String characteristic;
-  double price;
-  String? imageUrl;
-  String spiciness; // 'Tidak Pedas', 'Sedang', 'Pedas'
-  int stock;
-  int slotCapacity;
-  int minStock;
-  bool isActive;
-  List<MenuVariationGroup> variationGroups;
+  final int categoryId;
+  final String categoryName;
+  final String name;
+  final String? description;
+  final String? characteristic;
+  final num _price;
+  double get price => _price.toDouble();
+  final String? imageUrl;
+  final String spiciness; // 'Tidak Pedas', 'Sedang', 'Pedas'
+  final int stock;
+  final int slotCapacity;
+  final int minStock;
+  final bool isActive;
+  final List<MenuVariationGroup> variationGroups;
 
   // Compatibility getters for teman's code
   int get id => menuId;
@@ -26,7 +27,7 @@ class MenuModel {
   bool get isStockSafe => stock > minStock;
 
   String get formattedPrice {
-    final intVal = price.round();
+    final intVal = _price.round();
     final valueStr = intVal.toString();
     final buffer = StringBuffer();
     int count = 0;
@@ -41,15 +42,15 @@ class MenuModel {
     return 'Rp $formatted';
   }
 
-  MenuModel({
+  const MenuModel({
     int? id,
     int? menuId,
     required this.categoryId,
     this.categoryName = '',
     required this.name,
-    this.description = '',
-    this.characteristic = '',
-    required dynamic price,
+    this.description,
+    this.characteristic,
+    required num price,
     this.imageUrl,
     this.spiciness = 'Tidak Pedas',
     this.stock = 10,
@@ -58,12 +59,11 @@ class MenuModel {
     int? minStock,
     int? minStockThreshold,
     this.isActive = true,
-    List<MenuVariationGroup>? variationGroups,
+    this.variationGroups = const [],
   })  : menuId = menuId ?? id ?? 0,
-        price = (price is num) ? price.toDouble() : 0.0,
+        _price = price,
         slotCapacity = slotCapacity ?? maxSlot ?? 10,
-        minStock = minStock ?? minStockThreshold ?? 2,
-        variationGroups = variationGroups ?? [];
+        minStock = minStock ?? minStockThreshold ?? 2;
 
   MenuModel copyWith({
     int? id,
@@ -73,7 +73,7 @@ class MenuModel {
     String? name,
     String? description,
     String? characteristic,
-    dynamic price,
+    num? price,
     String? imageUrl,
     String? spiciness,
     int? stock,
@@ -91,7 +91,7 @@ class MenuModel {
       name: name ?? this.name,
       description: description ?? this.description,
       characteristic: characteristic ?? this.characteristic,
-      price: price != null ? ((price is num) ? price.toDouble() : this.price) : this.price,
+      price: price ?? this.price,
       imageUrl: imageUrl ?? this.imageUrl,
       spiciness: spiciness ?? this.spiciness,
       stock: stock ?? this.stock,
@@ -105,17 +105,16 @@ class MenuModel {
   factory MenuModel.fromJson(Map<String, dynamic> json) {
     final parsedId = (json['menu_id'] ?? json['id']) as int? ?? 0;
     final parsedCategoryId = (json['category_id'] ?? json['categoryId']) as int? ?? 0;
-    final parsedPrice = json['price'];
-    final doublePrice = (parsedPrice is num) ? parsedPrice.toDouble() : 0.0;
+    final parsedPrice = json['price'] as num? ?? 0;
 
     return MenuModel(
       menuId: parsedId,
       categoryId: parsedCategoryId,
       categoryName: json['category_name'] as String? ?? '',
       name: json['name'] as String? ?? '',
-      description: json['description'] as String? ?? '',
-      characteristic: json['characteristic'] as String? ?? '',
-      price: doublePrice,
+      description: json['description'] as String?,
+      characteristic: json['characteristic'] as String?,
+      price: parsedPrice,
       imageUrl: json['image_url'] as String?,
       spiciness: json['spiciness'] as String? ?? 'Tidak Pedas',
       stock: (json['stock'] as int?) ?? 0,

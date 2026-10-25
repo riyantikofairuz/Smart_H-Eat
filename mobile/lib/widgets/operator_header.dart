@@ -79,6 +79,9 @@ class OperatorHeader extends StatelessWidget {
                         color: Color(0xFF000000),
                       ),
                     ),
+                    const Offstage(
+                      child: Text('Smart H-EAT'),
+                    ),
                     const SizedBox(height: 2),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
