@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../constants/app_colors.dart';
 import '../../services/dummy_operator_service.dart';
@@ -81,7 +82,7 @@ class _OperatorLoginViewState extends State<OperatorLoginView> {
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight - 32, // Ensure full height for vertical centering
+                  minHeight: constraints.maxHeight.isFinite ? math.max(0.0, constraints.maxHeight - 32) : 0.0, // Ensure full height for vertical centering
                 ),
                 child: IntrinsicHeight(
                   child: Column(
