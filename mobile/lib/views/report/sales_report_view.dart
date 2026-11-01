@@ -14,11 +14,13 @@ import '../../widgets/operator_header.dart';
 class SalesReportView extends StatefulWidget {
   final VoidCallback? onBack;
   final ValueChanged<int>? onNavigateTab;
+  final SalesPeriod initialPeriod;
 
   const SalesReportView({
     super.key,
     this.onBack,
     this.onNavigateTab,
+    this.initialPeriod = SalesPeriod.weekly,
   });
 
   @override
@@ -27,11 +29,12 @@ class SalesReportView extends StatefulWidget {
 
 class _SalesReportViewState extends State<SalesReportView> {
   final DummyOperatorService _service = DummyOperatorService();
-  SalesPeriod _selectedPeriod = SalesPeriod.weekly;
+  late SalesPeriod _selectedPeriod;
 
   @override
   void initState() {
     super.initState();
+    _selectedPeriod = widget.initialPeriod;
     _service.addListener(_onServiceUpdate);
   }
 

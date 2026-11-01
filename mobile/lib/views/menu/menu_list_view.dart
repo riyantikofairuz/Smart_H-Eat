@@ -14,10 +14,12 @@ import 'edit_menu_view.dart';
 /// serta Speed Dial FAB pop-up untuk Tambah Kategori & Tambah Menu.
 class MenuListView extends StatefulWidget {
   final ValueChanged<int>? onNavigateTab;
+  final bool initialSpeedDialOpen;
 
   const MenuListView({
     super.key,
     this.onNavigateTab,
+    this.initialSpeedDialOpen = false,
   });
 
   @override
@@ -35,9 +37,11 @@ class _MenuListViewState extends State<MenuListView> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
+    _isSpeedDialOpen = widget.initialSpeedDialOpen;
     _speedDialController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 220),
+      value: widget.initialSpeedDialOpen ? 1.0 : 0.0,
     );
     _speedDialAnimation = CurvedAnimation(
       parent: _speedDialController,
