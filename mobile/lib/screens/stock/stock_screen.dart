@@ -150,7 +150,9 @@ class _StockScreenState extends State<StockScreen> with SingleTickerProviderStat
   }
 
   Widget _buildSpeedDial(BuildContext context) {
-    return Column(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 70.0),
+      child: Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -217,8 +219,9 @@ class _StockScreenState extends State<StockScreen> with SingleTickerProviderStat
           ),
         ),
       ],
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildSpeedDialItem({
     required Key key,

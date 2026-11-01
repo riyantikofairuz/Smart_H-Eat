@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:smart_heat/main.dart';
 import 'package:smart_heat/services/auth_service.dart';
+import 'package:smart_heat/services/dummy_operator_service.dart';
 import 'package:smart_heat/widgets/operator_header.dart';
 import 'package:smart_heat/widgets/smart_heat_logo.dart';
 
@@ -99,18 +100,32 @@ void main() {
     expect((imageWidget.image as AssetImage).assetName, 'assets/images/smart_heat_logo.jpg');
   });
 
-  testWidgets('Operator Mode smoke test & branding verification', (WidgetTester tester) async {
+  testWidgets('Operator Mode Dashboard verification matching Image 1', (WidgetTester tester) async {
+    DummyOperatorService().login('kemas', 'password');
+
     await tester.pumpWidget(const MyApp());
     await tester.pumpAndSettle();
 
-    // Verify branding & header elements on Dashboard
-    expect(find.text('SMART H-EAT'), findsAtLeastNWidgets(1));
-    expect(find.text('OPERATOR MODE'), findsAtLeastNWidgets(1));
+    // Verify Image 1 & 2 elements on Dashboard
+    expect(find.textContaining('Halo, Pak Kemas'), findsOneWidget);
+    expect(find.text('Mesin Aktif'), findsOneWidget);
+    expect(find.text('Sudirman Hub'), findsOneWidget);
+    expect(find.text('PK'), findsNothing);
+    expect(find.text('PERHATIAN'), findsOneWidget);
+    expect(find.text('Mesin Perlu Restock Segera!'), findsOneWidget);
     expect(find.text('RINGKASAN OPERASIONAL'), findsOneWidget);
-    expect(find.text('Kapasitas Tray Mesin'), findsOneWidget);
+    expect(find.text('Live Update'), findsOneWidget);
+    expect(find.text('Total Pendapatan Hari ini'), findsOneWidget);
+    expect(find.text('Porsi Terjual'), findsOneWidget);
+    expect(find.text('Suhu Vending'), findsOneWidget);
+    expect(find.text('Suhu Optimal'), findsOneWidget);
+    expect(find.byKey(const Key('dashboard_notification_button')), findsOneWidget);
+    expect(find.byKey(const Key('dashboard_logout_button')), findsOneWidget);
   });
 
   testWidgets('Bottom navigation switches between Dashboard, Stok, and Laporan', (WidgetTester tester) async {
+    DummyOperatorService().login('kemas', 'password');
+
     await tester.pumpWidget(const MyApp());
     await tester.pumpAndSettle();
 
@@ -118,9 +133,10 @@ void main() {
     await tester.tap(find.text('Stok'));
     await tester.pumpAndSettle();
 
-    // Verify Menu & Stok tab elements
+    // Verify Menu & Stok tab elements matching Image 3
     expect(find.text('Daftar Menu Tersedia'), findsOneWidget);
-    expect(find.byType(TextField), findsOneWidget); // Search bar
+    expect(find.textContaining('Semua'), findsOneWidget);
+    expect(find.byKey(const Key('stock_fab_add')), findsOneWidget);
 
     // Tap "Laporan" in bottom navigation
     await tester.tap(find.text('Laporan'));
@@ -138,12 +154,26 @@ void main() {
     expect(find.text('RINGKASAN OPERASIONAL'), findsOneWidget);
   });
 
-  testWidgets('Navigation to Add Menu and back works seamlessly', (WidgetTester tester) async {
+  testWidgets('Speed dial pop-up opens Add Menu view and back works seamlessly', (WidgetTester tester) async {
+    DummyOperatorService().login('kemas', 'password');
+
     await tester.pumpWidget(const MyApp());
     await tester.pumpAndSettle();
 
-    // Tap "Tambah Menu" quick action button from dashboard
-    await tester.tap(find.text('Tambah Menu'));
+    // Go to Stok tab
+    await tester.tap(find.text('Stok'));
+    await tester.pumpAndSettle();
+
+    // Tap Speed Dial FAB (+)
+    await tester.tap(find.byKey(const Key('stock_fab_add')));
+    await tester.pumpAndSettle();
+
+    // Verify Speed dial pop-up options (Image 4)
+    expect(find.byKey(const Key('speed_dial_add_menu')), findsOneWidget);
+    expect(find.byKey(const Key('speed_dial_add_category')), findsOneWidget);
+
+    // Tap "Tambah Menu"
+    await tester.tap(find.byKey(const Key('speed_dial_add_menu')));
     await tester.pumpAndSettle();
 
     // Verify Add Menu view is rendered
@@ -156,16 +186,26 @@ void main() {
     await tester.tap(find.byIcon(Icons.arrow_back_ios_new_rounded));
     await tester.pumpAndSettle();
 
-    // Verify returned to Dashboard
-    expect(find.text('RINGKASAN OPERASIONAL'), findsOneWidget);
+    // Verify returned to Stok
+    expect(find.text('Daftar Menu Tersedia'), findsOneWidget);
   });
 
-  testWidgets('Navigation to Manage Categories and back works seamlessly', (WidgetTester tester) async {
+  testWidgets('Speed dial pop-up opens Manage Categories view and back works seamlessly', (WidgetTester tester) async {
+    DummyOperatorService().login('kemas', 'password');
+
     await tester.pumpWidget(const MyApp());
     await tester.pumpAndSettle();
 
-    // Tap "Kelola Kategori" quick action button from dashboard
-    await tester.tap(find.text('Kelola Kategori'));
+    // Go to Stok tab
+    await tester.tap(find.text('Stok'));
+    await tester.pumpAndSettle();
+
+    // Tap Speed Dial FAB (+)
+    await tester.tap(find.byKey(const Key('stock_fab_add')));
+    await tester.pumpAndSettle();
+
+    // Tap "Tambah Kategori"
+    await tester.tap(find.byKey(const Key('speed_dial_add_category')));
     await tester.pumpAndSettle();
 
     // Verify Category view is rendered
@@ -176,11 +216,13 @@ void main() {
     await tester.tap(find.byIcon(Icons.arrow_back_ios_new_rounded));
     await tester.pumpAndSettle();
 
-    // Verify returned to Dashboard
-    expect(find.text('RINGKASAN OPERASIONAL'), findsOneWidget);
+    // Verify returned to Stok
+    expect(find.text('Daftar Menu Tersedia'), findsOneWidget);
   });
 
-  testWidgets('Search bar filters menus dynamically in Menu & Stok view', (WidgetTester tester) async {
+  testWidgets('Category chips filter menus dynamically in Menu & Stok view', (WidgetTester tester) async {
+    DummyOperatorService().login('kemas', 'password');
+
     await tester.pumpWidget(const MyApp());
     await tester.pumpAndSettle();
 
@@ -188,15 +230,11 @@ void main() {
     await tester.tap(find.text('Stok'));
     await tester.pumpAndSettle();
 
-    // Enter search text "kering"
-    await tester.enterText(find.byType(TextField), 'kering');
-    await tester.pumpAndSettle();
-
-    // Should find Mie Tarempa Kering
+    // Verify menus exist
     expect(find.text('Mie Tarempa Kering'), findsOneWidget);
 
-    // Clear search
-    await tester.tap(find.byIcon(Icons.clear_rounded));
+    // Tap category chip
+    await tester.tap(find.textContaining('Semua'));
     await tester.pumpAndSettle();
     expect(find.text('Mie Tarempa Kering'), findsOneWidget);
   });

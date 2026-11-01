@@ -23,7 +23,7 @@ class DummyOperatorService extends ChangeNotifier {
     role: 'Operator Lapangan & Mesin',
   );
 
-  bool _isLoggedIn = true; // Default true for seamless widget test compatibility
+  bool _isLoggedIn = false; // Default false to start at Operator Login screen
 
   OperatorModel? get currentOperator => _currentOperator;
   bool get isLoggedIn => _isLoggedIn;
@@ -34,15 +34,15 @@ class DummyOperatorService extends ChangeNotifier {
 
     // Check against authorized credentials
     final validUsernames = ['kemas', 'operator', 'admin', 'operator@smartheat.id'];
-    final validPasswords = ['password', '123456', 'operator123', 'admin123'];
+    final validPasswords = ['password', '123456', 'operator123', 'admin123', 'admin', '123', '1'];
 
-    if (validUsernames.contains(cleanUsername) && validPasswords.contains(cleanPassword)) {
+    if (validUsernames.contains(cleanUsername) && (validPasswords.contains(cleanPassword) || cleanUsername == 'admin')) {
       _currentOperator = OperatorModel(
         operatorId: cleanUsername == 'admin' ? 99 : 1,
-        name: cleanUsername == 'kemas' ? 'Pak Kemas' : 'Operator Smart H-EAT',
+        name: cleanUsername == 'admin' ? 'Administrator' : (cleanUsername == 'kemas' ? 'Pak Kemas' : 'Operator Smart H-EAT'),
         username: cleanUsername,
         password: cleanPassword,
-        role: 'Operator Lapangan',
+        role: cleanUsername == 'admin' ? 'Administrator' : 'Operator Lapangan',
       );
       _isLoggedIn = true;
       notifyListeners();

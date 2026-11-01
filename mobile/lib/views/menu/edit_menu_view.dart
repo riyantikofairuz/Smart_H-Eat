@@ -168,6 +168,13 @@ class _EditMenuViewState extends State<EditMenuView> {
     }
   }
 
+  void _handleTabNavigation(int index) {
+    Navigator.of(context).pop();
+    if (widget.onNavigateTab != null) {
+      widget.onNavigateTab!(index);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final categories = _service.categories;
@@ -186,6 +193,33 @@ class _EditMenuViewState extends State<EditMenuView> {
                     OperatorHeader(
                       title: 'Edit Menu',
                       onBack: widget.onBack,
+                      trailing: InkWell(
+                        onTap: () => _handleTabNavigation(0),
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.grid_view_rounded, size: 14, color: AppColors.primary),
+                              SizedBox(width: 4),
+                              Text(
+                                'Dashboard',
+                                style: TextStyle(
+                                  fontSize: 11.5,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 20),
 
@@ -535,7 +569,32 @@ class _EditMenuViewState extends State<EditMenuView> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 12),
+
+                    // Kembali ke Dashboard Button
+                    SizedBox(
+                      height: 48,
+                      child: OutlinedButton.icon(
+                        onPressed: () => _handleTabNavigation(0),
+                        icon: const Icon(Icons.arrow_back_rounded, size: 16, color: AppColors.primary),
+                        label: const Text(
+                          'Kembali ke Dashboard Operator',
+                          style: TextStyle(
+                            fontSize: 13.5,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(color: AppColors.primary.withValues(alpha: 0.3), width: 1.2),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          backgroundColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -544,11 +603,7 @@ class _EditMenuViewState extends State<EditMenuView> {
             // Bottom Navigation Bar
             OperatorBottomNav(
               currentIndex: 1, // Stok
-              onTap: (index) {
-                if (widget.onNavigateTab != null) {
-                  widget.onNavigateTab!(index);
-                }
-              },
+              onTap: _handleTabNavigation,
             ),
           ],
         ),

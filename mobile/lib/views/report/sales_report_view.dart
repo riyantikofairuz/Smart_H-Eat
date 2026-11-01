@@ -4,7 +4,6 @@ import '../../models/sales_report_model.dart';
 import '../../services/dummy_operator_service.dart';
 import '../../widgets/operator_bottom_nav.dart';
 import '../../widgets/operator_header.dart';
-import '../restock/restock_report_view.dart';
 
 /// Halaman Laporan Penjualan (STEP 4)
 /// Menampilkan filter periode (Hari Ini, Minggu Ini, Bulan Ini),
@@ -195,72 +194,10 @@ class _SalesReportViewState extends State<SalesReportView> {
                       title: 'Laporan Penjualan',
                       showBackButton: widget.onBack != null,
                       onBack: widget.onBack,
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.print_rounded, color: AppColors.primary, size: 20),
-                            tooltip: 'Cetak / Ekspor Laporan',
-                            onPressed: () => _handleExportReport(report),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.inventory_2_outlined, color: AppColors.primary, size: 20),
-                            tooltip: 'Laporan Restock',
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RestockReportView(
-                                    onBack: () => Navigator.pop(context),
-                                    onNavigateTab: widget.onNavigateTab,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-
-                    // Navigation link to Restock Report (UC-F021)
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RestockReportView(
-                              onBack: () => Navigator.pop(context),
-                              onNavigateTab: widget.onNavigateTab,
-                            ),
-                          ),
-                        );
-                      },
-                      borderRadius: BorderRadius.circular(12),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: AppColors.border),
-                        ),
-                        child: const Row(
-                          children: [
-                            Icon(Icons.history_rounded, size: 18, color: AppColors.primary),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                'Lihat Riwayat & Laporan Restock Makanan',
-                                style: TextStyle(
-                                  fontSize: 12.5,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.textPrimary,
-                                ),
-                              ),
-                            ),
-                            Icon(Icons.arrow_forward_ios_rounded, size: 13, color: AppColors.textSecondary),
-                          ],
-                        ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.print_rounded, color: AppColors.primary, size: 20),
+                        tooltip: 'Cetak / Ekspor Laporan',
+                        onPressed: () => _handleExportReport(report),
                       ),
                     ),
                     const SizedBox(height: 14),

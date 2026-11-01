@@ -292,6 +292,13 @@ class _AddCategoryViewState extends State<AddCategoryView> {
     super.dispose();
   }
 
+  void _handleTabNavigation(int index) {
+    Navigator.of(context).pop();
+    if (widget.onNavigateTab != null) {
+      widget.onNavigateTab!(index);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -308,6 +315,33 @@ class _AddCategoryViewState extends State<AddCategoryView> {
                     OperatorHeader(
                       title: 'Tambah Kategori Baru',
                       onBack: _handleCancel,
+                      trailing: InkWell(
+                        onTap: () => _handleTabNavigation(0),
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.grid_view_rounded, size: 14, color: AppColors.primary),
+                              SizedBox(width: 4),
+                              Text(
+                                'Dashboard',
+                                style: TextStyle(
+                                  fontSize: 11.5,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 20),
 
@@ -597,7 +631,25 @@ class _AddCategoryViewState extends State<AddCategoryView> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
+
+                    // Kembali ke Dashboard Button
+                    SizedBox(
+                      height: 46,
+                      child: TextButton.icon(
+                        onPressed: () => _handleTabNavigation(0),
+                        icon: const Icon(Icons.arrow_back_rounded, size: 16, color: AppColors.primary),
+                        label: const Text(
+                          'Kembali ke Dashboard Operator',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -606,11 +658,7 @@ class _AddCategoryViewState extends State<AddCategoryView> {
             // Bottom Navigation Bar
             OperatorBottomNav(
               currentIndex: 1, // Stok
-              onTap: (index) {
-                if (widget.onNavigateTab != null) {
-                  widget.onNavigateTab!(index);
-                }
-              },
+              onTap: _handleTabNavigation,
             ),
           ],
         ),
