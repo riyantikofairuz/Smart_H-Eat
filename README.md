@@ -1,106 +1,202 @@
+<p align="center">
+  <img src=".github/assets/Banner%20Smart%20Heat.png" alt="Smart H-EAT Banner" width="650" />
+</p>
+
 # H-EAT: Smart Heat Vending Machine
 
-This repository contains the source code for the H-EAT project, a smart vending machine system. This project was developed as part of the PBL TRPL-313 program. The system is composed of a backend API built with Laravel and a cross-platform mobile application built with Flutter.
+This repository contains the source code for the **H-EAT** project, a smart vending machine system. Developed as part of the PBL TRPL-313 program, the system integrates an IoT-ready backend API built with Laravel and a modern cross-platform mobile application built with Flutter.
 
-## Architecture
+---
 
-The project is divided into two main components:
+## 🏛 Architecture Overview
 
-- **`backend/`**: A Laravel-based application that serves as the central API for the smart vending machine. It handles data management, user authentication, and business logic.
-- **`mobile/`**: A Flutter application designed for users to interact with the H-EAT vending machine. It is built to be cross-platform, with support for Android, iOS, and desktop platforms.
+The project is structured into three main components:
 
-### Backend (Laravel)
+- **`backend/`**: A Laravel 13 RESTful API managing user authentication, catalog & menu variation, orders, payments, hardware device commands, and restock logs.
+- **`mobile/`**: A Flutter application providing a seamless user interface for customers to browse menu items, customize variations, and complete transactions.
+- **`docker/` & `docker-compose.yml`**: Fully containerized local development stack for the backend services.
 
-- **Framework**: [Laravel 13](https://laravel.com/)
-- **Database**: Configured for SQLite, MySQL, MariaDB, PostgreSQL, and SQL Server.
-- **API Authentication**: [Laravel Sanctum](https://laravel.com/docs/sanctum) for API token and session-based authentication.
-- **Frontend Tooling**: [Vite](https://vitejs.dev/) with [Tailwind CSS](https://tailwindcss.com/) for asset bundling.
+### Tech Stack Details
 
-### Mobile (Flutter)
+| Component | Technology | Description |
+| :--- | :--- | :--- |
+| **Backend API** | [Laravel 13](https://laravel.com/) | PHP 8.3, Laravel Sanctum for API token authentication |
+| **Mobile App** | [Flutter](https://flutter.dev/) | Cross-platform (Android, iOS, Web, Desktop) |
+| **Containerization** | [Docker](https://www.docker.com/) & Docker Compose | Multi-container environment for Nginx, PHP, MySQL, & phpMyAdmin |
+| **Web Server** | Nginx (Alpine) | Reverse proxy routing requests to PHP-FPM on port `8080` |
+| **Database** | MySQL 8.0 | Relational database mapped to port `3307` |
+| **DB Management** | phpMyAdmin | Web-based database management interface on port `8081` |
 
-- **Framework**: [Flutter](https://flutter.dev/)
-- **Platform Support**: The project is structured to support Android, iOS, Linux, macOS, Web, and Windows.
-- **Functionality**: Provides the user interface for interacting with the vending machine services through the backend API.
+---
 
-## Getting Started
+## 🐳 Docker Services & Port Mapping
 
-To get a local copy up and running, follow these simple steps.
+When running via Docker Compose, the following services and ports are exposed:
+
+| Service | Container Name | Internal Port | Host Port | Access URL / Connection |
+| :--- | :--- | :--- | :--- | :--- |
+| **Nginx (Web/API)** | `smartheat_nginx` | `80` | `8080` | [http://localhost:8080](http://localhost:8080) |
+| **PHP-FPM** | `smartheat_php` | `9000` | - | PHP 8.3 FPM + Composer 2 |
+| **MySQL Database** | `smartheat_mysql` | `3306` | `3307` | `localhost:3307` |
+| **phpMyAdmin** | `smartheat_phpmyadmin` | `80` | `8081` | [http://localhost:8081](http://localhost:8081) |
+
+### Docker Default Database Credentials
+
+- **Host (from container)**: `db`
+- **Host (from host machine / tools)**: `127.0.0.1` (Port: `3307`)
+- **Database**: `smartheat_db`
+- **Username**: `smartheat_user`
+- **Password**: `smartheat_pass`
+- **Root Password**: `root`
+
+---
+
+## 🚀 Getting Started
+
+Follow the instructions below to get your local environment running.
 
 ### Prerequisites
 
-- **Backend**:
-  - PHP >= 8.3
-  - [Composer](https://getcomposer.org/)
-  - Node.js & npm
-- **Mobile**:
-  - [Flutter SDK](https://docs.flutter.dev/get-started/install)
+- **Docker & Docker Compose** (Recommended for Backend) or Native PHP >= 8.3, Composer, Node.js & npm
+- **Flutter SDK** (for Mobile App)
 
-### Backend Installation
+---
+
+### Backend Setup
+
+You can run the backend either using **Docker (Option A - Recommended)** or **Native Local Setup (Option B)**.
+
+#### Option A: Running with Docker (Recommended)
+
+1. **Prepare Environment File**:
+   Copy `.env.example` to `.env` inside the `backend` directory:
+
+   ```sh
+   cp backend/.env.example backend/.env
+   ```
+
+2. **Configure Database in `backend/.env`**:
+   Adjust your database connection values to match Docker:
+
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=db
+   DB_PORT=3306
+   DB_DATABASE=smartheat_db
+   DB_USERNAME=smartheat_user
+   DB_PASSWORD=smartheat_pass
+   ```
+
+3. **Build and Start Containers**:
+   Run Docker Compose from the root project directory:
+
+   ```sh
+   docker compose up -d --build
+   ```
+
+4. **Initialize Laravel Application**:
+   Run key generation and database migrations inside the PHP container:
+
+   ```sh
+   # Install PHP dependencies (if vendor is not yet installed)
+   docker compose exec php composer install
+
+   # Generate application key
+   docker compose exec php php artisan key:generate
+
+   # Run database migrations
+   docker compose exec php php artisan migrate
+   ```
+
+5. **Verify Running Services**:
+   - Backend API: [http://localhost:8080](http://localhost:8080)
+   - phpMyAdmin: [http://localhost:8081](http://localhost:8081)
+
+6. **Useful Docker Commands**:
+
+   ```sh
+   # Stop all containers
+   docker compose down
+
+   # View container logs
+   docker compose logs -f
+
+   # Access PHP container shell
+   docker compose exec php sh
+   ```
+
+---
+
+#### Option B: Running Locally (Native / Laragon)
 
 1. Navigate to the backend directory:
 
-    ```sh
-    cd backend
-    ```
+   ```sh
+   cd backend
+   ```
 
 2. Install Composer dependencies:
 
-    ```sh
-    composer install
-    ```
+   ```sh
+   composer install
+   ```
 
-3. Create your environment file from the example:
+3. Set up the environment file:
 
-    ```sh
-    cp .env.example .env
-    ```
+   ```sh
+   cp .env.example .env
+   ```
 
-4. Generate a new application key:
+4. Generate application key:
 
-    ```sh
-    php artisan key:generate
-    ```
+   ```sh
+   php artisan key:generate
+   ```
 
-5. Run the database migrations:
+5. Configure your database in `.env` and run migrations:
 
-    ```sh
-    php artisan migrate
-    ```
+   ```sh
+   php artisan migrate
+   ```
 
-6. Install NPM dependencies and build the frontend assets:
+6. Install frontend assets and build:
 
-    ```sh
-    npm install
-    npm run build
-    ```
+   ```sh
+   npm install
+   npm run build
+   ```
 
-7. Start the development server:
+7. Start the local server:
 
-    ```sh
-    php artisan serve
-    ```
+   ```sh
+   php artisan serve
+   ```
 
-### Mobile App Installation
+---
+
+### 📱 Mobile App Setup
 
 1. Navigate to the mobile directory:
 
-    ```sh
-    cd mobile
-    ```
+   ```sh
+   cd mobile
+   ```
 
-2. Install Flutter dependencies:
+2. Install Flutter packages:
 
-    ```sh
-    flutter pub get
-    ```
+   ```sh
+   flutter pub get
+   ```
 
-3. Run the application on a connected device or emulator:
+3. Run on your connected device, emulator, or desktop:
 
-    ```sh
-    flutter run
-    ```
+   ```sh
+   flutter run
+   ```
 
-## Team Members
+---
+
+## 👥 Team Members
 
 - **Muhammad Akbar Fairuz Riyantiko** - 4342501090
 - **Zakki Zakwan Adysti** - 4342501063
