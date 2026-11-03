@@ -1,32 +1,40 @@
 import 'package:flutter/material.dart';
 
-/// Komponen visual logo aplikasi Smart H-Eat.
-///
-/// Menggunakan aset logo resmi `assets/images/smart_heat_logo.png`
-/// dengan mempertahankan aspect ratio 1:1 tanpa distorsi/stretching.
 class SmartHeatLogo extends StatelessWidget {
-  /// Ukuran sisi persegi logo (default: 42).
   final double size;
+  final String assetPath;
 
-  /// Lebar opsional jika ingin meng-override [size].
-  final double? width;
-
-  /// Tinggi opsional jika ingin meng-override [size].
-  final double? height;
-
-  const SmartHeatLogo({super.key, this.size = 42, this.width, this.height});
+  const SmartHeatLogo({
+    super.key,
+    this.size = 78.0,
+    this.assetPath = 'assets/images/smart_heat_logo.jpg',
+  });
 
   @override
   Widget build(BuildContext context) {
-    final effectiveWidth = width ?? size;
-    final effectiveHeight = height ?? size;
-
-    return Image.asset(
-      'assets/images/smart_heat_logo.png',
-      width: effectiveWidth,
-      height: effectiveHeight,
-      fit: BoxFit.contain,
-      filterQuality: FilterQuality.medium,
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(6),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.asset(
+          assetPath,
+          fit: BoxFit.contain,
+          alignment: Alignment.center,
+        ),
+      ),
     );
   }
 }
