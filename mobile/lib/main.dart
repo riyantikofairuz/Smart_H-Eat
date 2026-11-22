@@ -41,6 +41,7 @@ class _MyAppState extends State<MyApp> {
     return CartProvider(
       notifier: _cartNotifier,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Smart Heat',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
