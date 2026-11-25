@@ -19,6 +19,13 @@ class Operator extends Model
         'password',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'password' => 'hashed',
+        ];
+    }
+
     public function restockLogs()
     {
         return $this->hasMany(RestockLog::class);
